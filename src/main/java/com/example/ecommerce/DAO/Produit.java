@@ -24,7 +24,8 @@ public class Produit {
     private String Image;
     private int gros;
     private int Stock;
+
     @JsonIgnore
-    @OneToMany(mappedBy = "produit",cascade = CascadeType.ALL)
-    private List<Commande> commentaireList;
+    @OneToMany(mappedBy = "produit")
+    private List<CommandeDetails> commandeDetails;
 }

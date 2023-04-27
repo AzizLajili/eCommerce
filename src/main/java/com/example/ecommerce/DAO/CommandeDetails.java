@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
 
 @Builder
 @ToString
@@ -14,20 +12,18 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Commande {
+public class CommandeDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Temporal(TemporalType.DATE)
-    private Date date;
+    private int quantite;
+
     @ManyToOne
-    private AppUser user;
-    @JsonIgnore
-    @OneToMany(mappedBy = "commande")
-    private List<CommandeDetails> commandeDetailsList;
+    private Commande commande;
 
-
-
+    @ManyToOne
+    private Produit produit;
 
 }

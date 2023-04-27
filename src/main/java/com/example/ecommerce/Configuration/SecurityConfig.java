@@ -28,36 +28,15 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserDetailsService userDetailsService;
-    private final UserServiceImpl userService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
-    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers( "/login").permitAll();
-        http.authorizeRequests().antMatchers( "/allroles").permitAll();
-        http.authorizeRequests().antMatchers( "/addUser").permitAll();
-        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().anyRequest().permitAll();
         http.httpBasic();
-        //http.formLogin();//.loginPage("/login").defaultSuccessUrl("/allusers",true);
-        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean(),userService));
-        http.addFilterBefore(new SimpleCORSFilter(), ChannelProcessingFilter.class);
+        http.csrf().disable().authorizeRequests();
+    }
 
-        http.addFilterBefore(new SimpleCORSFilter(),UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.logout().logoutUrl("/logout").clearAuthentication(true).invalidateHttpSession(true).deleteCookies("Authorization");
-    }
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
-        return super.authenticationManagerBean();
-    }
 
 
 
